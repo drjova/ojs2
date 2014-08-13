@@ -13,7 +13,7 @@
 {assign var=layoutEditor value=$submission->getUserBySignoffType('SIGNOFF_LAYOUT')}
 
 <div id="layout">
-<h3>{translate key="submission.layout"}</h3>
+<div class="page-header"><h3>{translate key="submission.layout"}</h3></div>
 
 {if $useLayoutEditors}
 <div id="layoutEditors">
@@ -27,7 +27,8 @@
 </div>
 {/if}
 
-<table width="100%" class="info">
+<table width="100%" class="info table table-striped table-condensed">
+<thead>
 	<tr>
 		<td width="28%" colspan="2">&nbsp;</td>
 		<td width="18%" class="heading">{translate key="submission.request"}</td>
@@ -35,6 +36,8 @@
 		<td width="16%" class="heading">{translate key="submission.complete"}</td>
 		<td width="22%" colspan="2" class="heading">{translate key="submission.acknowledge"}</td>
 	</tr>
+</thead>
+<tbody>
 	<tr>
 		<td colspan="2">
 			{translate key="submission.layout.layoutVersion"}
@@ -95,9 +98,6 @@
 			{/if}
 		</td>
 	</tr>
-	<tr>
-		<td colspan="7" class="separator">&nbsp;</td>
-	</tr>
 
 	<tr>
 		<td colspan="2">{translate key="submission.layout.galleyFormat"}</td>
@@ -123,9 +123,6 @@
 	</tr>
 	{/foreach}
 	<tr>
-		<td colspan="7" class="separator">&nbsp;</td>
-	</tr>
-	<tr>
 		<td width="28%" colspan="2">{translate key="submission.supplementaryFiles"}</td>
 		<td width="34%" colspan="2" class="heading">{translate key="common.file"}</td>
 		<td width="16%" class="heading">{translate key="common.order"}</td>
@@ -146,9 +143,7 @@
 		<td colspan="7" class="nodata">{translate key="common.none"}</td>
 	</tr>
 	{/foreach}
-	<tr>
-		<td colspan="7" class="separator">&nbsp;</td>
-	</tr>
+</tbody>
 </table>
 
 <form method="post" action="{url op="uploadLayoutFile"}"  enctype="multipart/form-data">
@@ -162,26 +157,26 @@
 	<input type="submit" name="createRemote" value="{translate key="common.create"}" class="button" />
 </form>
 
-<div id="layoutComments">
+<div id="layoutComments" class="margin-bottom-10">
 {translate key="submission.layout.layoutComments"}
 {if $submission->getMostRecentLayoutComment()}
 	{assign var="comment" value=$submission->getMostRecentLayoutComment()}
-	<a href="javascript:openComments('{url op="viewLayoutComments" path=$submission->getId() anchor=$comment->getId()}');" class="icon">{icon name="comment"}</a> {$comment->getDatePosted()|date_format:$dateFormatShort}
+	<a href="javascript:openComments('{url op="viewLayoutComments" path=$submission->getId() anchor=$comment->getId()}');" class="icon">class="btn btn-default btn-xs">{icon name="comment"} {$comment->getDatePosted()|date_format:$dateFormatShort}</a>
 {else}
-	<a href="javascript:openComments('{url op="viewLayoutComments" path=$submission->getId()}');" class="icon">{icon name="comment"}</a> {translate key="common.noComments"}
+	<a href="javascript:openComments('{url op="viewLayoutComments" path=$submission->getId()}');" class="btn btn-default btn-xs">{icon name="comment"} {translate key="common.noComments"}</a>
 {/if}
+</div>
 
 {if $currentJournal->getLocalizedSetting('layoutInstructions')}
 &nbsp;&nbsp;
-<a href="javascript:openHelp('{url op="instructions" path="layout"}')" class="action">{translate key="submission.layout.instructions"}</a>
+<a href="javascript:openHelp('{url op="instructions" path="layout"}')" class="action btn btn-default btn-xs"><i class="material-icons icon-inside-button">info_outline</i>  {translate key="submission.layout.instructions"}</a>
 {/if}
 {if $currentJournal->getSetting('provideRefLinkInstructions')}
-&nbsp;&nbsp;
-<a href="javascript:openHelp('{url op="instructions" path="referenceLinking"}')" class="action">{translate key="submission.layout.referenceLinking"}</a>
+<a href="javascript:openHelp('{url op="instructions" path="referenceLinking"}')" class="action btn btn-default btn-xs"><i class="material-icons icon-inside-button">info_outline</i> {translate key="submission.layout.referenceLinking"}</a>
 {/if}
 {foreach name=templates from=$templates key=templateId item=template}
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="downloadLayoutTemplate" path=$submission->getId()|to_array:$templateId}" class="action">{$template.title|escape}</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="downloadLayoutTemplate" path=$submission->getId()|to_array:$templateId}" class="action btn btn-default btn-xs"><i class="material-icons icon-inside-button">get_app</i> {$template.title|escape}</a>
 {/foreach}
-</div>
+
 </div>
 

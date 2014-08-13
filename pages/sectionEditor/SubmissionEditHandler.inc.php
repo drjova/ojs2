@@ -462,8 +462,16 @@ class SubmissionEditHandler extends SectionEditorHandler {
 
 		if ($reviewerId) {
 			// Assign reviewer to article
-			SectionEditorAction::addReviewer($submission, $reviewerId, null, $request);
-			$request->redirect(null, null, 'submissionReview', $articleId);
+			$reviewId = SectionEditorAction::addReviewer($submission, $reviewerId, null, $request);
+			// Automatically open the "Article Review Request" email
+			// Don't send the email but display it to the user first - otherwise
+			// we need to find a way to replace all e-mail template variables (like {$reviewerName})
+			$send = false;
+			$this->validate($articleId, SECTION_EDITOR_ACCESS_REVIEW);
+			$submission =& $this->submission;
+			if (SectionEditorAction::notifyReviewer($submission, $reviewId, $send, $request)) {
+				$request->redirect(null, null, 'submissionReview', $articleId);
+			}
 
 			// FIXME: Prompt for due date.
 		} else {
